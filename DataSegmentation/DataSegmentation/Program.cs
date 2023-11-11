@@ -40,6 +40,10 @@ namespace DataSegmentation
 
 			foreach (ImageRepresentation image in allImages)
 			{
+
+				if (image.pathology == "BENIGN_WITHOUT_CALLBACK") continue;
+
+
 				Match match = pathCroppedRegex.Match(image.path);
 
 				if (match.Success)
