@@ -1,0 +1,7 @@
+C:\Users\Giovanna\Documents\database-segmentation\DataSegmentation\DataSegmentation\bin\Debug\DataSegmentation.exe.config
+C:\Users\Giovanna\Documents\database-segmentation\DataSegmentation\DataSegmentation\bin\Debug\DataSegmentation.exe
+C:\Users\Giovanna\Documents\database-segmentation\DataSegmentation\DataSegmentation\bin\Debug\DataSegmentation.pdb
+C:\Users\Giovanna\Documents\database-segmentation\DataSegmentation\DataSegmentation\obj\Debug\DataSegmentation.csproj.AssemblyReference.cache
+C:\Users\Giovanna\Documents\database-segmentation\DataSegmentation\DataSegmentation\obj\Debug\DataSegmentation.csproj.CoreCompileInputs.cache
+C:\Users\Giovanna\Documents\database-segmentation\DataSegmentation\DataSegmentation\obj\Debug\DataSegmentation.exe
+C:\Users\Giovanna\Documents\database-segmentation\DataSegmentation\DataSegmentation\obj\Debug\DataSegmentation.pdb

@@ -19,8 +19,10 @@ namespace DataSegmentation
 		{
 			allImages = new List<ImageRepresentation>();
 
-			string zipFile = AppDomain.CurrentDomain.BaseDirectory;
-			string destinationUnzippedDirectory = AppDomain.CurrentDomain.BaseDirectory + "\\unzipped";
+			string slnPath = GetSlnPath(AppDomain.CurrentDomain.BaseDirectory);
+			string zipFile = slnPath + "\\archive.zip";
+
+			string destinationUnzippedDirectory = slnPath + "\\unzipped";
 			string csvDirectory = destinationUnzippedDirectory + "\\csv";
 			string pjegDirectory = destinationUnzippedDirectory + "\\jpeg";
 
@@ -35,8 +37,6 @@ namespace DataSegmentation
 			GetImagesRepresentation(csvDirectory + "\\mass_case_description_train_set.csv");
 
 			Regex pathCroppedRegex = new Regex("Mass-(Test|Training)(?<first>[\\w]*)\\/(?<second>[\\d\\.]*)\\/(?<third>[\\d\\.]*)\\/(?<fourth>[\\w\\d]*)\\.dcm");
-			string imagensPath = "C:\\Users\\Giovanna\\Documents\\BANCO\\jpeg";
-
 
 			foreach (ImageRepresentation image in allImages)
 			{
@@ -45,7 +45,7 @@ namespace DataSegmentation
 				if (match.Success)
 				{
 					string pathCropped = match.Groups["third"].Value;
-					string croppedImageFilePath = imagensPath + "\\" + pathCropped;
+					string croppedImageFilePath = pjegDirectory + "\\" + pathCropped;
 
 					if (Directory.Exists(croppedImageFilePath))
 					{
@@ -77,20 +77,25 @@ namespace DataSegmentation
 							}
 
 							string fileName = Path.GetFileName(smallerImage);
-							string completeDestination = destinationOfSegmentedImages + "\\" + image.pathology + "\\" + fileName;
+							string completeDestinationDirectory = destinationOfSegmentedImages + "\\" + image.pathology;
+
+                            if(!Directory.Exists(completeDestinationDirectory)) Directory.CreateDirectory(completeDestinationDirectory);
+
+
+							string completeDestinationFile = completeDestinationDirectory + "\\" + fileName;
 							int counter = 1;
 							string originalNameFile = fileName;
 
 
-							while (File.Exists(completeDestination))
+							while (File.Exists(completeDestinationFile))
 							{
 								fileName = Path.GetFileNameWithoutExtension(originalNameFile) + " (" + counter + ")" + Path.GetExtension(originalNameFile);
-								completeDestination = destinationOfSegmentedImages + "\\" + image.pathology + "\\" + fileName;
+								completeDestinationFile = destinationOfSegmentedImages + "\\" + image.pathology + "\\" + fileName;
 								counter++;
 							}
 
 
-							File.Copy(smallerImage, completeDestination);
+							File.Copy(smallerImage, completeDestinationFile);
 						}
 
 					}
@@ -98,6 +103,23 @@ namespace DataSegmentation
 				}
 			}
 		}
+
+		static string GetSlnPath(string directory)
+		{
+			while (directory != null)
+			{
+				string slnPath = Path.Combine(directory, "*.sln");
+				string[] slnFiles = Directory.GetFiles(directory, "*.sln");
+
+				if (slnFiles.Length > 0) return directory;
+
+				directory = Directory.GetParent(directory)?.FullName;
+			}
+
+			return null;
+		}
+
+
 		public static void UnzipFile(string zipFile, string destinationPath)
 		{
 			try
@@ -124,7 +146,7 @@ namespace DataSegmentation
 			{
 				using (TextFieldParser csvReader = new TextFieldParser(path))
 				{
-					csvReader.SetDelimiters(new string[] { "\t" });
+					csvReader.SetDelimiters(new string[] { "," });
 					csvReader.HasFieldsEnclosedInQuotes = false;
 					string[] colFields = csvReader.ReadFields();
 
